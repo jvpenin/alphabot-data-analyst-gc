@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Alpha Bot - Data Analyse with AI" />
+    <title>Alpha Bot – AI Sales Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <!-- Botão de menu hambúrguer (mobile) -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Overlay para fechar sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="app-container">
+      <!-- Sidebar Esquerda -->
+      <aside class="sidebar" id="sidebar">
+
+        <div class="upload-zone">
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;" multiple />
+          <button onclick="document.getElementById('fileInput').click()" class="upload-trigger">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>Upload Files</span>
+          </button>
+          <p class="upload-hint">Somente CSV • Max 10MB</p>
+        </div>
+
+        <div class="files-container">
+          <h2 class="section-title">Data Sources</h2>
+          <div id="filesList" class="files-list"></div>
+        </div>
+
+
+      </aside>
+
+      <!-- Área Principal do Chat -->
+      <main class="chat-container">
+        <div class="chat-header">
+          <div class="main-title">
+            <h1 class="animated-title">Alpha Bot, <span id="typewriter" class="typewriter"></span><span class="cursor">|</span></h1>
+            <p class="powered-by">Powered by João Caldeira</p>
+          </div>
+        </div>
+
+        <div id="messages" class="messages" aria-live="polite"></div>
+
+        <div id="typing" class="typing" hidden>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
+
+        <form id="chatForm" class="input-area" autocomplete="off">
+          <input 
+            id="input" 
+            type="text" 
+            placeholder="faça sua pergunta..." 
+            spellcheck="false"
+          />
+          <button type="submit" class="send-btn" aria-label="Enviar mensagem">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      // Efeito de digitação animado
+      const phrases = [
+        "IA aplicada à análise de desempenho"
+      ];
+      
+      let currentPhrase = 0;
+      let currentChar = 0;
+      let isDeleting = false;
+      let typeSpeed = 100;
+      
+      function typeWriter() {
+        const typewriterElement = document.getElementById('typewriter');
+        const fullText = phrases[currentPhrase];
+        
+        if (isDeleting) {
+          typewriterElement.textContent = fullText.substring(0, currentChar - 1);
+          currentChar--;
+          typeSpeed = 50; // Velocidade de apagar
+        } else {
+          typewriterElement.textContent = fullText.substring(0, currentChar + 1);
+          currentChar++;
+          typeSpeed = 100; // Velocidade de digitar
+        }
+        
+        // Se terminou de escrever a frase
+        if (!isDeleting && currentChar === fullText.length) {
+          typeSpeed = 3000; // Pausa longa antes de apagar
+          isDeleting = true;
+        }
+        // Se terminou de apagar a frase
+        else if (isDeleting && currentChar === 0) {
+          isDeleting = false;
+          typeSpeed = 1000; // Pausa antes de começar novamente
+        }
+        
+        setTimeout(typeWriter, typeSpeed);
+      }
+      
+      // Inicia a animação quando a página carrega
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(typeWriter, 1000); // Aguarda 1 segundo antes de iniciar
+      });
+    </script>
+  </body>
+</html>
