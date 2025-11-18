@@ -128,6 +128,9 @@ async function loadFilesList() {
     const data = await res.json();
     const files = data.files || [];
     
+    console.log(`📋 Arquivos carregados: ${files.length}`);
+    files.forEach(f => console.log(`  - ${f.name} (${f.rows} linhas)`));
+    
     if (files.length === 0) {
       filesList.innerHTML = '<p class="no-files">Nenhum arquivo enviado ainda</p>';
       return;
@@ -216,16 +219,21 @@ async function deleteFile(fileId) {
 }
 
 // Event listener para upload de arquivos
-fileInput.addEventListener('change', (e) => {
+fileInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
   console.log('📁 Arquivos selecionados:', files.length);
   
   if (files.length > 0) {
-    files.forEach(file => {
-      console.log('📄 Processando:', file.name, 'Tamanho:', file.size, 'bytes');
-      uploadFile(file);
-    });
+    // Limpa o input antes de começar os uploads
     fileInput.value = '';
+    
+    // Aguarda todos os uploads serem concluídos antes de continuar
+    for (const file of files) {
+      console.log('📄 Processando:', file.name, 'Tamanho:', file.size, 'bytes');
+      await uploadFile(file);
+      // Pequeno delay entre uploads para garantir IDs únicos
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
   }
 });
 

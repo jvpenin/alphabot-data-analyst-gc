@@ -42,13 +42,20 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     const worksheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-    const fileId = Date.now().toString();
-    uploadedSheets.push({
+    // Gera ID único usando timestamp + número aleatório para evitar conflitos
+    const fileId = Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    const newSheet = {
       id: fileId,
       name: req.file.originalname,
       data: data,
       uploadedAt: new Date().toISOString()
-    });
+    };
+    
+    uploadedSheets.push(newSheet);
+    
+    console.log(`📤 Arquivo adicionado: ${req.file.originalname} (ID: ${fileId})`);
+    console.log(`📊 Total de arquivos em memória: ${uploadedSheets.length}`);
 
     res.json({ 
       success: true, 
