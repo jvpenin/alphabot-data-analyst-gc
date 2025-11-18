@@ -125,24 +125,34 @@ app.post('/api/query', async (req, res) => {
       });
     }
     
-    // Prepara os dados das planilhas com LIMITAÇÃO para evitar MAX_TOKENS
+    // Prepara os dados das planilhas com LIMITAÇÃO otimizada para evitar MAX_TOKENS
     const sheetsContext = uploadedSheets.map(sheet => {
+      const headers = sheet.data[0] || [];
+      const sampleData = sheet.data.slice(1, Math.min(21, sheet.data.length)); // Apenas 20 linhas de exemplo
+      
       return {
         name: sheet.name,
-        headers: sheet.data[0] || [],
-        totalRows: sheet.data.length,
-        // Limita a 50 linhas para evitar exceder o limite de tokens
-        data: sheet.data.slice(0, Math.min(51, sheet.data.length)) // Header + 50 linhas
+        headers: headers,
+        totalRows: sheet.data.length - 1, // Exclui header do count
+        sampleData: sampleData.length > 0 ? sampleData : [],
+        note: sampleData.length < (sheet.data.length - 1) ? `Mostrando ${sampleData.length} de ${sheet.data.length - 1} linhas` : 'Dados completos'
       };
     });
     
-    const prompt = `Analise os dados e responda em português simples:
+    const prompt = `Você é um analista de dados experiente. Analise os dados fornecidos e responda a pergunta em português brasileiro de forma clara e objetiva.
 
-DADOS: ${JSON.stringify(sheetsContext)}
+DADOS DISPONÍVEIS:
+${sheetsContext.map(sheet => 
+`Planilha: ${sheet.name}
+Colunas: ${sheet.headers.join(', ')}
+Total de registros: ${sheet.totalRows}
+${sheet.note}
+Primeiras linhas: ${JSON.stringify(sheet.sampleData.slice(0, 5))}`
+).join('\n\n')}
 
 PERGUNTA: ${question}
 
-Responda de forma direta e objetiva usando apenas texto simples.`;
+INSTRUÇÕES: Responda de forma direta, use dados específicos quando possível, e mantenha a resposta focada na pergunta.`;
 
     const answer = await askGemini(prompt);
     res.json({ answer });

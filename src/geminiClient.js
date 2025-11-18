@@ -21,7 +21,7 @@ async function askGemini(prompt) {
       }],
       generationConfig: {
         temperature: 0.7,
-        maxOutputTokens: 1024,
+        maxOutputTokens: 8192,
         topP: 0.8,
         topK: 40
       },
@@ -73,7 +73,7 @@ async function askGemini(prompt) {
       return cleanedResponse;
     }
 
-    // Se não houver candidatos, pode ter sido bloqueado por safety
+    // Se não houver candidatos, pode ter sido bloqueado por safety ou outros motivos
     if (data.candidates && data.candidates.length > 0 && data.candidates[0].finishReason) {
       console.warn('⚠️ Resposta bloqueada - Motivo:', data.candidates[0].finishReason);
       console.warn('📊 Candidato completo:', JSON.stringify(data.candidates[0], null, 2));
@@ -84,6 +84,10 @@ async function askGemini(prompt) {
         return 'A resposta foi bloqueada por questões de segurança. Tente reformular sua pergunta de forma mais específica sobre análise de dados.';
       } else if (reason === 'RECITATION') {
         return 'A resposta foi bloqueada por questões de direitos autorais. Tente fazer uma pergunta mais específica sobre seus dados.';
+      } else if (reason === 'MAX_TOKENS') {
+        return 'A resposta foi muito longa. Tente fazer uma pergunta mais específica ou dividi-la em partes menores.';
+      } else if (reason === 'LENGTH') {
+        return 'A pergunta ou dados são muito extensos. Tente com dados menores ou uma pergunta mais focada.';
       } else {
         return `Não foi possível gerar uma resposta (${reason}). Tente reformular sua pergunta.`;
       }
