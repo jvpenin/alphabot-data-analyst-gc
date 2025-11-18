@@ -1,23 +1,23 @@
-# 📊 Alpha Bot - Data Analyst
+Alpha Bot - Data Analyst
 
 Um assistente de IA para análise de dados que responde perguntas sobre suas planilhas CSV/Excel em tempo real.
 
 **Desenvolvido para:** Aula de IA e Dados - Geração Caldeira  
-**Tipo:** Projeto Individual e Pessoal
+**Tipo:** Projeto Individual, gratuito e para fins educacionais
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
-- 📤 Upload de múltiplos arquivos (CSV, XLSX, XLS)
-- 🤖 Análise inteligente usando Google Gemini 2.5 Flash
-- 💬 Chat em tempo real com perguntas sobre seus dados
-- 📱 Interface responsiva (desktop e mobile)
-- ⚡ Processamento rápido de grandes planilhas
+-  Upload de múltiplos arquivos (CSV, XLSX, XLS)
+-  Análise inteligente usando Google Gemini 2.5 Flash
+-  Chat em tempo real com perguntas sobre seus dados
+-  Interface responsiva (desktop e mobile)
+-  Processamento rápido de grandes planilhas
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ### Stack Tecnológico
 - **Frontend:** HTML5, CSS3, JavaScript vanilla
@@ -119,12 +119,6 @@ PORT=3000
    - Em "Settings" → "Environment Variables"
    - Adicione: `GEMINI_API_KEY=sua_chave`
 
-### Limitações da versão gratuita:
-- ⏱️ Cold start (primeira requisição lenta)
-- 💾 Memória reinicia a cada deploy
-- 🔄 Máximo 60 segundos por requisição
-- 📊 Dados não persistem entre execuções
-
 ---
 
 ## 📦 Instalação Local
@@ -225,17 +219,6 @@ Projeto educacional - Desenvolvimento livre para fins de aprendizado.
 ## 👨‍💻 Autor
 
 Desenvolvido como projeto individual para a **Aula de IA e Dados - Geração Caldeira**
-
----
-
-## 🤝 Suporte
-
-Para dúvidas ou melhorias:
-- Abra uma issue no GitHub
-- Consulte a documentação do [Gemini API](https://ai.google.dev)
-- Verifique o [Express.js Guide](https://expressjs.com)
-
----
 
 **⚡ Última atualização:** Novembro 2025
 
